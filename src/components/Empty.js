@@ -5,7 +5,7 @@ export default class Empty extends React.Component {
   render() {
     return (
       <View style={styles.content}>
-        <Text style={styles.text}>EmptyEmptyEmptyEmptyEmptyEmptyEmptyEmptyEmpty</Text>
+        
       </View>
     );
   }
@@ -14,7 +14,7 @@ export default class Empty extends React.Component {
 const styles = StyleSheet.create({
   content: {
     backgroundColor: '#FFFFFF',
-    flexGrow: 1 
+    flexGrow: 1
   },
   text: {
     color: "black",

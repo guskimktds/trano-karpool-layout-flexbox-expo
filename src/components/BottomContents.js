@@ -5,7 +5,7 @@ export default class BottomContents extends React.Component {
   render() {
     return (
       <View style={styles.content}>
-        <Text style={styles.text}>카풀선택하기</Text>
+        <Text style={styles.text}>카풀목록 조회하기</Text>
       </View>
     );
   }
@@ -13,18 +13,15 @@ export default class BottomContents extends React.Component {
 
 const styles = StyleSheet.create({
   content: {
-    padding: 20,
-    margin: 0,
-    backgroundColor: '#FFFF00',
-    flexGrow: 1,
-    height: 60,
+    backgroundColor: '#DEDEDE',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'red',
-    textAlign: 'center'
+    borderColor: 'white',
   },
   text: {
-    color: "grey",
-    fontSize: 16,
-    textAlign: "center"
+    color: "#8080A0",
+    fontSize: 16
   }
 });

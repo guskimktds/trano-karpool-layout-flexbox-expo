@@ -1,30 +1,70 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default class TopContents extends React.Component {
+export default class TopContents extends Component {
   render() {
     return (
-      <View style={styles.content}>
-        <Text style={styles.text}>MapContents</Text>
+      <View style={styles.headerContatiner}>
+        <View style={styles.headerHomeButtonContainer}>
+          <Text style={styles.homeStyle}>홈</Text>
+        </View>
+        <View style={styles.headerTitleContainer}>
+          <Text style={[styles.text, styles.textBold]}>사내카풀(Kar4U)</Text>
+        </View>
+        <View style={styles.headerMenuButtonContainer}>
+          <Text style={styles.menuStyle}>메뉴</Text>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  content: {
-    padding: 20,
+  headerContatiner: {
+    flex : 1,
+    flexDirection: 'row',
+    padding: 30,
     margin: 0,
     backgroundColor: '#000000',
-    flexGrow: 1,
-    height: 80,
     borderWidth: 1,
-    borderColor: 'red',
-    textAlign: 'center'
+    borderColor: 'white',
+    alignItems : 'center',
+    justifyContent: 'space-between'
+  },
+  headerTitleContainer: {
+    flex : 1,
+    flexDirection: 'row',
+    alignItems : 'center',
+    justifyContent: 'center'
   },
   text: {
     color: "white",
     fontSize: 20,
-    textAlign: "center"
-  }
+  },
+  headerMenuButtonContainer: {
+    flexDirection: 'row',
+    alignItems : 'flex-end',
+    backgroundColor: 'blue',
+    padding: 5,
+    borderRadius: 4
+  },
+  headerHomeButtonContainer: {
+    flexDirection: 'row',
+    alignItems : 'flex-end',
+    backgroundColor: 'blue',
+    padding: 5,
+    borderRadius: 4
+  },
+  menuStyle: {
+    color: "white",
+    fontSize: 16,
+  },
+  homeStyle: {
+    color: "white",
+    fontSize: 16,
+  },
+  textBold: {
+    fontWeight: 'bold'
+  },
+
 });
