@@ -1,15 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default class TabMenu extends React.Component {
+export default class TabMenu extends Component {
   render() {
+
+    const { navigation } = this.props.navigation;
+
     return (
       <View style={styles.tabMenuContainer}>
         <View style={styles.tabMenuButton}>
             <Text style={styles.text}>검색</Text>
         </View>
         <View style={[styles.tabMenuButton, {backgroundColor:'#001320'}]}>
+          <TouchableOpacity onPress={() => navigation.navigate('DriveRegist')}>
             <Text style={styles.text}>신청</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.tabMenuButton, {backgroundColor:'#001320'}]}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.text}>가입</Text>
+          </TouchableOpacity>
         </View>
 
       </View>

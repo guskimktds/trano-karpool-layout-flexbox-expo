@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default class TopContents extends Component {
   render() {
+    const { navigation } = this.props.navigation;
+
     return (
       <View style={styles.headerContatiner}>
+
         <View style={styles.headerHomeButtonContainer}>
           <Text style={styles.homeStyle}>홈</Text>
         </View>
+
         <View style={styles.headerTitleContainer}>
           <Text style={[styles.text, styles.textBold]}>사내카풀(Kar4U)</Text>
         </View>
+
         <View style={styles.headerMenuButtonContainer}>
-          <Text style={styles.menuStyle}>메뉴</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
+            <Text style={styles.menuStyle}>메뉴</Text>
+          </TouchableOpacity>
         </View>
+
       </View>
     );
   }

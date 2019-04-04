@@ -10,15 +10,15 @@ import BottomContents from './BottomContents';
 
 export default class RootComponent extends React.Component {
   render() {
-    return (
+      return (
       <View style={styles.container}>
-        <TopContents />
-        <TabMenu />
+        <TopContents navigation={this.props}/>
+        <TabMenu navigation={this.props}/>
         <MapContents />
         <SearchContents />
         <OptionContents />
         <Empty />
-        <BottomContents />
+        <BottomContents navigation={this.props}/>
       </View>
     );
   }
