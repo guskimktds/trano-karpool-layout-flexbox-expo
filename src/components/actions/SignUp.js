@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {  View, Text, TouchableOpacity, StyleSheet, TextInput, Dimensions, Platform, AsyncStorage, StatusBar   } from 'react-native';
 //import uuidv1 from "react-native-uuid";
 import uuidv1 from "uuid/v1";
+//import firebase from 'react-native-firebase';
+//import type { Notification, NotificationOpen } from 'react-native-firebase';
 
 const {height, width } = Dimensions.get("window");
 
@@ -34,6 +36,13 @@ export default class SignUp extends Component {
   _SignUp = () => {
     console.log("_addDriveInfo");
     const { name, sabun, tel, email  } = this.state;
+
+    // 회원가입 시 Push Token 발급 시작
+    console.log("회원가입 시 Push Token 발급 시작");
+    //let pushToken = this._getPushToken();
+    // 회원가입 시 Push Token 발급 끝
+    console.log("회원가입 시 Push Token 발급 끝, pushToken : "+pushToken);
+
     if( name !== "" && sabun !== "" && tel !== "" && email !== "" ){
       this.setState({
         name : "",
@@ -49,7 +58,8 @@ export default class SignUp extends Component {
         sabun : sabun,
         tel : tel,
         email : email,
-        author : "passenger"
+        author : "passenger",
+        pushToken : "pushToken"  // android runtime 에서 수정예정
       };
 
       this._saveSignUP(newSignUpObject);
@@ -58,6 +68,20 @@ export default class SignUp extends Component {
         console.log("회원정보 입력 필드 값 재 확인필요(null) !");
     }
   };
+
+  // async _getPushToken() {
+  //   // 회원가입 시 Push Token 발급 시작
+  //   const fcmToken = await firebase.messaging().getToken();
+  //   if (fcmToken) {
+  //       console.log("fcmToken: "+fcmToken);
+  //       // user has a device token
+  //   } else {
+  //     console.log("we have not token !!!!! ");
+  //       // user doesn't have a device token yet
+  //   }
+  //
+  //   return fcmToken;
+  // }
 
   _saveSignUP = signUpInfos => {
       console.log(JSON.stringify(signUpInfos));
@@ -89,6 +113,9 @@ export default class SignUp extends Component {
       // });
 
       //console.log(jsonData);
+      //회원가입
+      //push 토큰 발급 및 저장처리
+
     })
     .catch((error) => {
       console.error(error);

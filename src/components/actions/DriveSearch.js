@@ -9,7 +9,8 @@ import {
   Platform,
   ScrollView,
   AsyncStorage,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import Conditions from "./Condition";
 import DriveInfoList from "./DriveInfoList";
@@ -22,11 +23,13 @@ export default class DriveSearch extends React.Component {
     super(props);
     this.state = {
       newRoute : '',
-      keyword : '',
-      viewflag : '',
-      option: '',
-      searchParam: {}
+      jsonData : [],
+      isLoaded : false,
+      isLoadDataEmpty : true
     }
+    this._controlNewRoute = this._controlNewRoute.bind(this);
+    this._searchHandling = this._searchHandling.bind(this);
+    this._getDriveInfo = this._getDriveInfo.bind(this);
   }
 
   _controlNewRoute = text => {
@@ -36,11 +39,58 @@ export default class DriveSearch extends React.Component {
   };
 
   _searchHandling = () => {
-    console.log("_searchHandling");
+    console.log("_searchHandling this.state.newRoute11 : "+this.state.newRoute );
+
+    this._getDriveInfo();
+  };
+
+
+  _getDriveInfo=() => {
+    //let driveApiUrl = "http://localhost:8080/driveInfos";
+    //let driveApiUrl = "http://192.168.43.85:8080/driveInfos";
+    // let driveApiUrl = "http://192.168.43.85:8080/api/karforuInfo/waypoint/:waypoint";
+    let driveApiUrl = `http://192.168.43.85:8080/api/karforuInfo`;
+    if(this.state.newRoute !== ""){
+      driveApiUrl = `http://192.168.43.85:8080/api/karforuInfo/waypoint/${this.state.newRoute}`;
+    }
+
+    console.log("driveApiUrl : "+driveApiUrl);
+
+    fetch(driveApiUrl, {
+        method: 'GET',
+        headers: {
+        "Accept": "application/json",
+        'Content-Type': 'application/json'
+        }
+      }).then(response => response.json()).then(driveinfos => {
+      console.log("1@@@@@@@@@@@@@@@@@@");
+      console.log(driveinfos);
+      console.log("2@@@@@@@@@@@@@@@@@@");
+      this.setState({
+        isLoaded : true,
+        jsonData : driveinfos,
+        isLoadDataEmpty : false
+      });
+
+      if(driveinfos.error === "driveInfos not found") {
+        this.setState({
+          isLoadDataEmpty : true
+        });
+      }
+
+      console.log("3@@@@@@@@@@@@@@@@@@");
+      console.log(this.state.jsonData);
+      console.log("4@@@@@@@@@@@@@@@@@@");
+    })
+    .catch((error) => {
+      console.error(error);
+
+    });
   };
 
   render() {
-    const { newRoute} = this.state;
+    const { newRoute, jsonData, isLoaded, isLoadDataEmpty } = this.state;
+    console.log("===========> jsonData 555 : "+jsonData+", isLoaded : "+isLoaded+", isLoadDataEmpty : "+isLoadDataEmpty);
     return (
       <View style={styles.container}>
           <StatusBar barStyle="light-content"  />
@@ -81,7 +131,14 @@ export default class DriveSearch extends React.Component {
           </View>
           <View style={styles.listContainer}>
             <ScrollView style={styles.list}>
-              <DriveInfoList />
+            { isLoaded ? (
+              isLoadDataEmpty ? (<View><Text>데이터  없다.</Text></View>) :
+              (<DriveInfoList resultData={JSON.stringify(jsonData)} isLoadEmpty={isLoadDataEmpty} />)
+            ) : (
+              <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
+            ) }
             </ScrollView>
           </View>
     </View>

@@ -1,77 +1,53 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native";
 import * as globalStyles from '../../styles/global';
 
 const { width, height } = Dimensions.get("window");
 
 export default class DriveInfoList extends Component {
 
+  //const driveApiUrl = "http://192.168.43.85:8080/api/karforuInfo/waypoint/:waypoint";
+
   constructor(props){
     super(props);
     this.state = {
-      isLoaded : false,
-      jsonData : {}
+      isLoaded : true,
+      jsonData : JSON.parse(this.props.resultData),
+      isLoadDataEmpty : this.props.isLoadEmpty
     };
+
+    console.log("DriveInfoList777777 ==> this.state.jsonData : "+this.props.resultData+" isLoadDataEmpty : "+this.props.isLoadEmpty);
   }
 
-  componentDidMount() {
-    this._getDriveInfo();
-
-    console.log("App.js props : "+this.props.name);
-  }
-
-  _getDriveInfo=() => {
-    //let driveApiUrl = "http://localhost:8080/driveInfos";
-    let driveApiUrl = "http://192.168.43.85:8080/driveInfos";
-    console.log("driveApiUrl : "+driveApiUrl);
-
-    fetch(driveApiUrl, {
-        method: 'GET',
-        headers: {
-        "Accept": "application/json",
-        'Content-Type': 'application/json'
-        }
-      }).then(response => response.json()).then(driveinfos => {
-      console.log(driveinfos);
-      this.setState({
-        isLoaded : true,
-        jsonData : driveinfos
-        // id: driveinfos[0]._id,
-        // custno: driveinfos[0].custno
-      });
-
-      //console.log(jsonData);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  };
 
   render() {
-    const { jsonData, isLoaded } = this.state;
-    console.log(isLoaded);
+    const { jsonData, isLoadDataEmpty } = this.state;
+
+    if(isLoadDataEmpty){
+      return <View style={styles.container}><Text>찾으시는 카풀정보가 없습니다.</Text></View>;
+    }
     return (
       <View style={styles.container}>
-        { isLoaded ? (Object.values(jsonData).map(
-          (driveinfos) =>
-          <View style={[styles.list]} key={driveinfos._id}>
-            <View>
-              <Text style={styles.text}>{driveinfos.waypoint} → {driveinfos.destination}</Text>
-              <Text>{driveinfos.start_time} , {driveinfos.term} , {driveinfos.personnel}명, {driveinfos.status}</Text>
-            </View>
-            <View>
-              <TouchableOpacity style={[styles.button]}  >
-                <View >
-                  <Text style={styles.buttonText}>신청</Text>
+        { (Object.values(jsonData).map( (driveinfos) =>
+          <View style={styles.sublist} key={driveinfos._id}>
+            {Object.values(driveinfos.driveInfo).map( (driveInfo, index) =>
+              <View style={[styles.listContainer]} key={index}>
+                <View style={styles.list}>
+                  <Text style={styles.text} numberOfLines={1}>{driveInfo.route.waypoint} </Text>
+                  <Text style={styles.text} numberOfLines={1}> → {driveInfo.route.destination}</Text>
+                  <Text style={styles.smallText}> {driveInfo.route.passengers}명, {(driveInfo.route.status === 'ing') ? '모집중' : '마감'  }</Text>
                 </View>
-              </TouchableOpacity>
-            </View>
+                <View style={styles.buttonContents}>
+                  <TouchableOpacity style={[styles.button]}  >
+                    <View >
+                      <Text style={styles.buttonText}>신청</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
-        )) : (
-          <View style={[styles.container, styles.horizontal]}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        ) }
+        )) }
       </View>
     );
   }
@@ -82,8 +58,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    borderWidth: 0,
+    borderColor: 'red'
   },
-  list : {
+  listContainer : {
     paddingLeft : 20,
     paddingTop : 10,
     paddingBottom : 10,
@@ -94,9 +72,25 @@ const styles = StyleSheet.create({
     borderBottomColor: "#bbb",
     borderBottomWidth: StyleSheet.hairlineWidth
   },
+  list: {
+    flex:3,
+    borderWidth: 0,
+    borderColor: 'yellow'
+  },
   text : {
     fontSize : 20,
     color : globalStyles.TEXT_COLOR
+  },
+  smallText: {
+    fontSize : 16,
+    color: '#869696'
+  },
+  buttonContents: {
+    flex:1,
+    borderWidth: 0,
+    borderColor: 'green',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
     backgroundColor: globalStyles.BTN_COLOR,
@@ -106,7 +100,9 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 0,
+    borderColor: 'yellow'
   },
   buttonText: {
     color: 'white',
@@ -116,6 +112,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10
+  },
+  sublist: {
+    borderWidth: 0,
+    borderColor: 'green',
+  },
+  todepthlist: {
+    borderWidth: 0,
+    borderColor: 'blue',
   }
 
 });
